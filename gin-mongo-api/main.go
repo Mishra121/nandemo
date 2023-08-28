@@ -23,6 +23,7 @@ func main() {
 	configs.ConnectDB()
 
 	routes.UserRoutes(router)
+	routes.JournalOpenRoutes(router)
 
 	router.Use(middleware.Authentication())
 	// Auth routes

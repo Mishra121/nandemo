@@ -78,6 +78,8 @@ func GetAllJournalOfUser() gin.HandlerFunc {
 
 		var page = c.DefaultQuery("page", "1")
 		var limit = c.DefaultQuery("limit", "10")
+		var month = c.DefaultQuery("month", "none")
+		var year = c.DefaultQuery("year", "none")
 
 		intPage, err := strconv.Atoi(page)
 		if err != nil {
@@ -109,6 +111,41 @@ func GetAllJournalOfUser() gin.HandlerFunc {
 		var user_id string = curr_user_id.(string)
 		filter := bson.D{{Key: "user_id", Value: user_id}}
 
+		if year != "none" && month != "none" {
+
+			intMonth, err := strconv.Atoi(month)
+			if err != nil {
+				c.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+				return
+			}
+
+			intYear, err := strconv.Atoi(year)
+			if err != nil {
+				c.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+				return
+			}
+
+			startDate := time.Date(intYear, time.Month(intMonth), 1, 0, 0, 0, 0, time.UTC)
+			endDate := startDate.AddDate(0, 1, 0).Add(-time.Second)
+
+			startDateP, _ := time.Parse(time.RFC3339, startDate.Format(time.RFC3339))
+			endDateP, _ := time.Parse(time.RFC3339, endDate.Format(time.RFC3339))
+
+			filter = bson.D{
+				{Key: "$and",
+					Value: bson.A{
+						bson.D{{Key: "user_id", Value: user_id}},
+						bson.M{
+							"created_at": bson.M{
+								"$gte": startDateP,
+								"$lt":  endDateP,
+							},
+						},
+					},
+				},
+			}
+		}
+
 		results, err := journalCollection.Find(ctx, filter, &opt)
 
 		if err != nil {
@@ -127,5 +164,24 @@ func GetAllJournalOfUser() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, gin.H{"journals": journals})
+	}
+}
+
+func GetAJournal() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		journalId := c.Param("journalId")
+		var journal models.Journal
+		defer cancel()
+
+		objId, _ := primitive.ObjectIDFromHex(journalId)
+
+		err := journalCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&journal)
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"journal_data": journal})
 	}
 }
