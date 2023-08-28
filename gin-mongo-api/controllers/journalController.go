@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"net/http"
 	"time"
@@ -15,6 +16,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var journalCollection *mongo.Collection = configs.GetCollection(configs.DB, "journal")
@@ -67,7 +69,6 @@ func CreateJournal() gin.HandlerFunc {
 	}
 }
 
-// TODO: make paginated query
 func GetAllJournalOfUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -75,18 +76,46 @@ func GetAllJournalOfUser() gin.HandlerFunc {
 
 		defer cancel()
 
+		var page = c.DefaultQuery("page", "1")
+		var limit = c.DefaultQuery("limit", "10")
+
+		intPage, err := strconv.Atoi(page)
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+			return
+		}
+
+		intLimit, err := strconv.Atoi(limit)
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+			return
+		}
+
+		if intPage == 0 {
+			intPage = 1
+		}
+
+		if intLimit == 0 {
+			intLimit = 10
+		}
+
+		skip := (intPage - 1) * intLimit
+
+		opt := options.FindOptions{}
+		opt.SetLimit(int64(intLimit))
+		opt.SetSkip(int64(skip))
+
 		curr_user_id, _ := c.Get("uid")
 		var user_id string = curr_user_id.(string)
 		filter := bson.D{{Key: "user_id", Value: user_id}}
 
-		results, err := journalCollection.Find(ctx, filter)
+		results, err := journalCollection.Find(ctx, filter, &opt)
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
-		//reading from the db in an optimal way
 		defer results.Close(ctx)
 		for results.Next(ctx) {
 			var singleJournal models.Journal
