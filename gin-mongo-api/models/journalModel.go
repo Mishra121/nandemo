@@ -18,3 +18,12 @@ type Journal struct {
 	Description_style string             `json:"description_style"`
 	Attachment        string             `json:"attachment"`
 }
+
+type JournalEditSerializer struct {
+	Title             *string `json:"title" validate:"required,min=2,max=100"`
+	Description       *string `json:"description" validate:"required,min=2"`
+	Overall_mood      string  `json:"overall_mood" validate:"required,eq=GOOD|eq=BAD|eq=HAPPY|eq=NONE"`
+	Type              string  `json:"type"`
+	Description_style string  `json:"description_style"`
+	Attachment        string  `json:"attachment"`
+}
