@@ -19,3 +19,5 @@ go.work
 .DS_Store
 
 clientApp
+
+gin-mongo-api/tmp

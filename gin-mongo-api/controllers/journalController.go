@@ -190,9 +190,28 @@ func DeleteAJournal() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		journalId := c.Param("journalId")
+		var journal models.Journal
 		defer cancel()
 
 		objId, _ := primitive.ObjectIDFromHex(journalId)
+
+		err := journalCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&journal)
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+			return
+		}
+
+		curr_user_id, uid_exist := c.Get("uid")
+
+		if uid_exist {
+			var user_id string = curr_user_id.(string)
+			var journal_uid = journal.User_id
+
+			if user_id != journal_uid {
+				c.JSON(http.StatusNotAcceptable, gin.H{"status": "fail", "message": "user did not created the journal"})
+				return
+			}
+		}
 
 		result, err := journalCollection.DeleteOne(ctx, bson.M{"_id": objId})
 		if err != nil {

@@ -18,6 +18,8 @@ func main() {
 	}
 
 	router := gin.Default()
+	router.ForwardedByClientIP = true
+	router.SetTrustedProxies([]string{"127.0.0.1", "192.168.1.2", "10.0.0.0/8"})
 
 	//run database
 	configs.ConnectDB()

@@ -139,7 +139,26 @@ func Login() gin.HandlerFunc {
 
 		helper.UpdateAllTokens(token, refreshToken, foundUser.User_id)
 
-		c.JSON(http.StatusOK, foundUser)
+		type respFoundUser struct {
+			Fname         string `json:"first_name"`
+			Lname         string `json:"last_name"`
+			Email         string `json:"email"`
+			Phone         string `json:"phone"`
+			Token         string `json:"token"`
+			Refresh_token string `json:"refresh_token"`
+			User_id       string `json:"user_id"`
+		}
 
+		responseUser := &respFoundUser{
+			Fname:         *foundUser.First_name,
+			Lname:         *foundUser.Last_name,
+			Email:         *foundUser.Email,
+			Phone:         *foundUser.Phone,
+			Token:         *foundUser.Token,
+			Refresh_token: *foundUser.Refresh_token,
+			User_id:       foundUser.User_id,
+		}
+
+		c.JSON(http.StatusOK, gin.H{"user_info": responseUser})
 	}
 }

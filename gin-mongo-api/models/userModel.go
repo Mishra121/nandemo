@@ -20,3 +20,14 @@ type UserModel struct {
 	Updated_at    time.Time          `json:"updated_at"`
 	User_id       string             `json:"user_id"`
 }
+
+// ? ForgotPasswordInput struct
+type ForgotPasswordInput struct {
+	Email string `json:"email" binding:"required"`
+}
+
+// ? ResetPasswordInput struct
+type ResetPasswordInput struct {
+	Password        string `json:"password" binding:"required"`
+	PasswordConfirm string `json:"passwordConfirm" binding:"required"`
+}
