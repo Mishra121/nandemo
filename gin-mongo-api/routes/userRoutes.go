@@ -10,4 +10,6 @@ import (
 func UserRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.POST("/users-auth/signup", controller.SignUp())
 	incomingRoutes.POST("/users-auth/login", controller.Login())
+	incomingRoutes.POST("/users-auth/forgotpassword", controller.ForgotPassword())
+	incomingRoutes.PATCH("/users-auth/resetpassword/:resetToken", controller.ResetPassword())
 }
