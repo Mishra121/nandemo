@@ -33,7 +33,7 @@ func main() {
 	// Auth routes
 	routes.JournalRoutes(router)
 
-	router.Run("localhost:" + port)
+	router.Run(":" + port)
 }
 
 func CORSMiddleware() gin.HandlerFunc {
