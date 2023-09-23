@@ -14,7 +14,7 @@ import (
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "6000"
+		port = "8080"
 	}
 
 	router := gin.Default()
