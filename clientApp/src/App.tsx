@@ -1,6 +1,8 @@
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 import JournalPage from "./pages/journal";
 import ExpenseManager from "./pages/expenseManager";
@@ -27,7 +29,10 @@ import "./theme/variables.css";
 
 setupIonicReact();
 
+const queryClient = new QueryClient()
+
 const App: React.FC = () => (
+  <QueryClientProvider client={queryClient}>
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
@@ -46,6 +51,8 @@ const App: React.FC = () => (
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
+  <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>
 );
 
 export default App;
