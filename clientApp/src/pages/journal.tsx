@@ -1,20 +1,21 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import './journalPage.css';
+import {
+  IonContent,
+  IonPage,
+} from "@ionic/react";
+import { Link } from "react-router-dom";
+import HeaderNandemo from "../components/common/Header";
+import SubHeaderMobile from "../components/common/SubHeaderMobile";
+import "./journalPage.css";
 
 const JournalPage: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Journal</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <HeaderNandemo />
+
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <SubHeaderMobile />
+
+        <Link to={"/"}>Home</Link>
       </IonContent>
     </IonPage>
   );

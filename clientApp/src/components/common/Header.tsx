@@ -2,12 +2,9 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonPopover,
-  IonContent,
-  IonButton,
-  IonIcon,
 } from "@ionic/react";
-import { arrowDown } from "ionicons/icons";
+import { useLocation } from "react-router-dom";
+import { getActiveAppName } from "../../utilities/helpers";
 import useWindowDimensions from "../../utilities/hooks/use-window-dimensions";
 import "./HeaderNandemo.css";
 
@@ -17,10 +14,11 @@ const ActiveApp = ({ activeAppName }: { activeAppName: string }) => (
   </p>
 );
 
-const HeaderNandemo: React.FC = (props) => {
+const HeaderNandemo: React.FC = () => {
   const { width: windowWidth } = useWindowDimensions();
   const isMobileView = windowWidth ? windowWidth <= 600 : false;
-  const activeAppName = "Budget";
+  const location = useLocation();
+  const activeAppName = getActiveAppName(location.pathname);
 
   return (
     <>
@@ -31,26 +29,9 @@ const HeaderNandemo: React.FC = (props) => {
               <p>NanDemo</p>
 
               <div className="active-app-content">
-                {!isMobileView && (
+                {!isMobileView && activeAppName !== "" && (
                   <div>
                     <ActiveApp activeAppName={activeAppName} />
-                  </div>
-                )}
-
-                {isMobileView && (
-                  <div style={{ marginTop: "15px" }}>
-                    <IonButton
-                      color={"light"}
-                      size={"small"}
-                      id="click-trigger"
-                    >
-                      <IonIcon aria-hidden="true" icon={arrowDown} />
-                    </IonButton>
-                    <IonPopover trigger="click-trigger" triggerAction="click">
-                      <IonContent class="ion-padding">
-                        <ActiveApp activeAppName={activeAppName} />
-                      </IonContent>
-                    </IonPopover>
                   </div>
                 )}
               </div>
