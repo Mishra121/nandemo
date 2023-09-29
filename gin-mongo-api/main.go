@@ -26,8 +26,12 @@ func main() {
 
 	router.Use(CORSMiddleware())
 
+	router.NoRoute(func(ctx *gin.Context) {
+		ctx.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
+	})
 	routes.UserRoutes(router)
 	routes.JournalOpenRoutes(router)
+	routes.RandomOpenRoutes(router)
 
 	router.Use(middleware.Authentication())
 	// Auth routes
