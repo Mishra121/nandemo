@@ -2,8 +2,8 @@ import {
   IonContent,
   IonPage,
   // IonPage,
+  IonRouterLink,
 } from "@ionic/react";
-import { Link } from "react-router-dom";
 import HeaderNandemo from "../components/common/Header";
 import SubHeaderMobile from "../components/common/SubHeaderMobile";
 import "./expensePage.css";
@@ -15,7 +15,7 @@ const ExpenseManager: React.FC = () => {
       <IonContent fullscreen>
         <SubHeaderMobile />
 
-        <Link to={"/"}>Home</Link>
+        <IonRouterLink routerLink={"/"}>Home</IonRouterLink>
       </IonContent>
     </IonPage>
   );

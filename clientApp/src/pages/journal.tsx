@@ -1,8 +1,8 @@
 import {
   IonContent,
   IonPage,
+  IonRouterLink,
 } from "@ionic/react";
-import { Link } from "react-router-dom";
 import HeaderNandemo from "../components/common/Header";
 import SubHeaderMobile from "../components/common/SubHeaderMobile";
 import "./journalPage.css";
@@ -15,7 +15,7 @@ const JournalPage: React.FC = () => {
       <IonContent fullscreen>
         <SubHeaderMobile />
 
-        <Link to={"/"}>Home</Link>
+        <IonRouterLink routerLink={"/"}>Home</IonRouterLink>
       </IonContent>
     </IonPage>
   );

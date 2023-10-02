@@ -7,6 +7,8 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import JournalPage from "./pages/journal";
 import ExpenseManager from "./pages/expenseManager";
 import NandemoShell from "./pages/nandemoShell";
+import Login from "./pages/LoginPage";
+import Signup from "./pages/SignUpPage";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -44,6 +46,12 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/nandemo-select">
           <NandemoShell />
+        </Route>
+        <Route exact path="/auth/nandemo/login">
+          <Login />
+        </Route>
+        <Route exact path="/auth/nandemo/signup">
+          <Signup />
         </Route>
         <Route exact path="/">
           <Redirect to="/nandemo-select" />
