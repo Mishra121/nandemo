@@ -1,8 +1,11 @@
 import {
+  IonBackButton,
+  IonButtons,
   IonHeader,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import { arrowBack } from "ionicons/icons";
 import { useLocation } from "react-router-dom";
 import { getActiveAppName } from "../../utilities/helpers";
 import useWindowDimensions from "../../utilities/hooks/use-window-dimensions";
@@ -19,6 +22,7 @@ const HeaderNandemo: React.FC = () => {
   const isMobileView = windowWidth ? windowWidth <= 600 : false;
   const location = useLocation();
   const activeAppName = getActiveAppName(location.pathname);
+  const showBackButton = location.pathname.includes("auth");
 
   return (
     <>
@@ -26,6 +30,15 @@ const HeaderNandemo: React.FC = () => {
         <IonToolbar color={"dark"}>
           <IonTitle>
             <div className="header-nandemo">
+              {showBackButton && (
+                <IonButtons color="white">
+                  <IonBackButton
+                    icon={arrowBack}
+                    text=""
+                    className="custom-back"
+                  />
+                </IonButtons>
+              )}
               <p>NanDemo</p>
 
               <div className="active-app-content">
