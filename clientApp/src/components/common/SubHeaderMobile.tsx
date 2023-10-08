@@ -1,6 +1,5 @@
 import { IonButton, IonContent, IonIcon, IonPopover } from "@ionic/react";
-import { arrowDown } from "ionicons/icons";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { getActiveAppName } from "../../utilities/helpers";
 import useWindowDimensions from "../../utilities/hooks/use-window-dimensions";
 
@@ -9,6 +8,12 @@ export default function SubHeaderMobile() {
   const isMobileView = windowWidth ? windowWidth <= 600 : false;
   const location = useLocation();
   const activeAppName = getActiveAppName(location.pathname);
+  const history = useHistory();
+
+  const redirectToHome = () => {
+    history.push("/nandemo-select");
+  };
+
   return (
     <>
       {isMobileView && activeAppName !== "" && (
@@ -17,6 +22,9 @@ export default function SubHeaderMobile() {
             <p>
               <b>Active Screen</b>: {activeAppName}
             </p>
+          </IonButton>
+          <IonButton color={"dark"} size={"small"} onClick={redirectToHome}>
+            <p>Go Home</p>
           </IonButton>
         </div>
       )}
