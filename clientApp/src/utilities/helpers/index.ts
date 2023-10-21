@@ -23,3 +23,7 @@ export const isObjectEmpty = (objectName: Object) => {
     Object.keys(objectName).length === 0 && objectName.constructor === Object
   );
 };
+
+export const refreshPage = () => {
+  window.location.reload();
+};

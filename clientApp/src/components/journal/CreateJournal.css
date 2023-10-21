@@ -1,0 +1,18 @@
+.create-journal-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.create-journal-container h2 {
+  margin-bottom: 22px;
+}
+
+.react-quill-div .ql-container {
+  height: 300px;
+}
+
+@media only screen and (max-width: 650px) {
+  .create-journal-container {
+    max-width: 85%;
+  }
+}
