@@ -20,13 +20,14 @@ import "./AllJournals.css";
 import { arrowForwardCircle, arrowBackCircle } from "ionicons/icons";
 import { fixedLengthString, isObjectEmpty } from "../../utilities/helpers";
 import { formatDateString } from "../../utilities/dates";
+import useWindowDimensions from "../../utilities/hooks/use-window-dimensions";
 
 const AllJournals: React.FC = () => {
   const history = useHistory();
   const [currPage, setCurrPage] = useState<number>(1);
-  const [showJournalById, setShowJournalById] = useState<boolean | string>(
-    false
-  );
+  const { width: windowWidth } = useWindowDimensions();
+  const isMobileView = windowWidth ? windowWidth <= 600 : false;
+
   const parsedUserInfo = checkUserInfo();
 
   useEffect(() => {
@@ -121,25 +122,31 @@ const AllJournals: React.FC = () => {
     setCurrPage(currPage - 1);
   };
 
-  const handleCardClick = () => {
-    console.log("handleCardClick clicked");
-    setShowJournalById("56463654564563");
+  const handleCardClick = (journalId: string) => {
+    console.log("handleCardClick clicked", {journalId});
+    // setShowJournalById("56463654564563");
   };
-
-  if (showJournalById !== false) {
-    return (
-      <div>
-        <h1>{showJournalById}</h1>
-      </div>
-    );
-  }
 
   return (
     <div className="all-journal-container">
+      {isMobileView && currPage > 1 && (
+        <IonButton onClick={loadPreviousPageJournals} color="dark">
+          <IonIcon slot="start" icon={arrowBackCircle}></IonIcon>
+          Previous
+        </IonButton>
+      )}
+
+      {isMobileView && showNextPageJournals && (
+        <IonButton onClick={loadNextPageJournals} color="dark">
+          Next
+          <IonIcon slot="end" icon={arrowForwardCircle}></IonIcon>
+        </IonButton>
+      )}
+
       {allJournals?.map((journalData: JournalType, index: number) => (
         <IonCard
           key={`${journalData?.title}-${index}`}
-          onClick={handleCardClick}
+          onClick={() => handleCardClick(journalData?.ID)}
         >
           <IonCardHeader>
             <IonCardTitle>
@@ -158,14 +165,14 @@ const AllJournals: React.FC = () => {
         </IonCard>
       ))}
 
-      {currPage > 1 && (
+      {!isMobileView && currPage > 1 && (
         <IonButton onClick={loadPreviousPageJournals} color="dark">
           <IonIcon slot="start" icon={arrowBackCircle}></IonIcon>
           Previous
         </IonButton>
       )}
 
-      {showNextPageJournals && (
+      {!isMobileView && showNextPageJournals && (
         <IonButton onClick={loadNextPageJournals} color="dark">
           Next
           <IonIcon slot="end" icon={arrowForwardCircle}></IonIcon>
