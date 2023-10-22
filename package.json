@@ -1,0 +1,26 @@
+{
+  "name": "nandemo",
+  "version": "1.0.0",
+  "description": "nandemo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "cd ./clientApp && npm run lint",
+    "format": "cd ./clientApp && npm run format"
+  },
+  "author": "vib",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^15.0.2"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": "npm run lint",
+    "*.{js,jsx,ts,tsx,css,json}": "npm run format"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged --staged"
+    }
+  }
+}

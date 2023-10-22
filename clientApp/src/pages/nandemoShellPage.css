@@ -1,55 +1,55 @@
 .nandemoshell-heading {
-  text-align: center;
-  margin-top: 50px;
+	text-align: center;
+	margin-top: 50px;
 }
 
 .nandemoshell-selection {
-  margin-top: 35px;
+	margin-top: 35px;
 }
 
 @media only screen and (min-width: 650px) {
-  .nandemoshell-selection {
-    width: 65%;
-    margin: 0 auto;
-    margin-top: 40px;
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-  }
+	.nandemoshell-selection {
+		width: 65%;
+		margin: 0 auto;
+		margin-top: 40px;
+		display: flex;
+		justify-content: space-evenly;
+		flex-wrap: wrap;
+	}
 }
 
 .nandemoshell_selection__card {
-  max-width: 500px;
-  cursor: pointer;
+	max-width: 500px;
+	cursor: pointer;
 }
 
 @media only screen and (min-width: 650px) {
-  .nandemoshell_selection__card {
-    min-width: 500px;
-    margin-bottom: 40px;
-  }
+	.nandemoshell_selection__card {
+		min-width: 500px;
+		margin-bottom: 40px;
+	}
 }
 
 @media only screen and (max-width: 650px) {
-  .nandemoshell_selection__card {
-    width: 90%;
-    margin: 0 auto;
-    margin-bottom: 12px;
-  }
+	.nandemoshell_selection__card {
+		width: 90%;
+		margin: 0 auto;
+		margin-bottom: 12px;
+	}
 }
 
 .nandemoshell_selection__cardheader {
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 12px;
-  margin-bottom: 8px;
-  min-height: 48px;
+	display: flex;
+	justify-content: space-evenly;
+	margin-top: 12px;
+	margin-bottom: 8px;
+	min-height: 48px;
 }
 
 .nandemoshell_selection__cardcontent {
-  max-width: 75%;
-  margin: 0 auto;
-  margin-bottom: 0px;
-  margin-bottom: 12px;
-  min-height: 68px;
+	max-width: 75%;
+	margin: 0 auto;
+	margin-bottom: 0px;
+	margin-bottom: 12px;
+	min-height: 68px;
 }

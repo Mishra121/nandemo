@@ -1,7 +1,7 @@
 export const checkUserInfo = () => {
-  const userInfo = localStorage.getItem("user_info") ?? "{}";
+	const userInfo = localStorage.getItem("user_info") ?? "{}";
 
-  const parsedUserInfo = JSON.parse(userInfo);
+	const parsedUserInfo = JSON.parse(userInfo);
 
-  return parsedUserInfo;
+	return parsedUserInfo;
 };

@@ -1,10 +1,9 @@
-
 .signupPage ion-row {
-  max-width: 1000px;
-  margin: 0 auto;
+	max-width: 1000px;
+	margin: 0 auto;
 }
 
-.headingText h5  {
-  margin-top: 0.2rem;
-  color: #d3a6c7;
+.headingText h5 {
+	margin-top: 0.2rem;
+	color: #d3a6c7;
 }
