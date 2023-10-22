@@ -104,6 +104,7 @@ func GetAllJournalOfUser() gin.HandlerFunc {
 		skip := (intPage - 1) * intLimit
 
 		opt := options.FindOptions{}
+		opt.SetSort(bson.D{{Key: "created_at", Value: -1}})
 		opt.SetLimit(int64(intLimit))
 		opt.SetSkip(int64(skip))
 

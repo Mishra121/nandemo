@@ -4,6 +4,7 @@ import {
 	IonCardHeader,
 	IonCardTitle,
 	IonContent,
+	IonIcon,
 	IonPage,
 	IonThumbnail,
 } from "@ionic/react";
@@ -20,22 +21,26 @@ import { randomInteger } from "../utilities/helpers";
 import { NDEMO_API_URL } from "../constants/url";
 import { useEffect } from "react";
 import { checkUserInfo } from "../utilities/helpers/auth";
+import { bodySharp, bookSharp, walletSharp } from "ionicons/icons";
 
 const nandemoAppOptions = [
 	{
 		name: "Your Profile",
 		description: "profile section coming soon...",
 		url: "",
+		icon: bodySharp,
 	},
 	{
 		name: "Journal It",
 		description: "your easy helper to maintain daily activities",
 		url: "/journal-app",
+		icon: bookSharp,
 	},
 	{
 		name: "Budget It",
 		description: "user friendly expense manager at service",
 		url: "/expense-manager",
+		icon: walletSharp,
 	},
 	{
 		name: "Random Thoughts",
@@ -108,13 +113,15 @@ const NandemoShell: React.FC = () => {
 										<div className="nandemoshell_selection__cardheader">
 											{nandemoAppOption.name !== "Random Thoughts" && (
 												<IonThumbnail>
-													<img
-														alt="Silhouette of mountains"
-														src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-													/>
+													<IonIcon
+														size="large"
+														icon={nandemoAppOption.icon}
+													></IonIcon>
 												</IonThumbnail>
 											)}
-											<IonCardTitle style={{ marginTop: "8px" }}>
+											<IonCardTitle
+												style={{ marginTop: "8px", marginLeft: "-5px" }}
+											>
 												{nandemoAppOption.name}
 											</IonCardTitle>
 										</div>
