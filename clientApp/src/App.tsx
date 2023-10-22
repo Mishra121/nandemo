@@ -1,8 +1,8 @@
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools'
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 import JournalPage from "./pages/journal";
 import ExpenseManager from "./pages/expenseManager";
@@ -28,40 +28,40 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-import './theme/custom-tab-bar.css';
+import "./theme/custom-tab-bar.css";
 
 setupIonicReact();
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 const App: React.FC = () => (
-  <QueryClientProvider client={queryClient}>
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/journal-app">
-          <JournalPage />
-        </Route>
-        <Route exact path="/expense-manager">
-          <ExpenseManager />
-        </Route>
-        <Route exact path="/nandemo-select">
-          <NandemoShell />
-        </Route>
-        <Route exact path="/auth/nandemo/login">
-          <Login />
-        </Route>
-        <Route exact path="/auth/nandemo/signup">
-          <Signup />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/nandemo-select" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-  <ReactQueryDevtools initialIsOpen={false} />
-  </QueryClientProvider>
+	<QueryClientProvider client={queryClient}>
+		<IonApp>
+			<IonReactRouter>
+				<IonRouterOutlet>
+					<Route exact path="/journal-app">
+						<JournalPage />
+					</Route>
+					<Route exact path="/expense-manager">
+						<ExpenseManager />
+					</Route>
+					<Route exact path="/nandemo-select">
+						<NandemoShell />
+					</Route>
+					<Route exact path="/auth/nandemo/login">
+						<Login />
+					</Route>
+					<Route exact path="/auth/nandemo/signup">
+						<Signup />
+					</Route>
+					<Route exact path="/">
+						<Redirect to="/nandemo-select" />
+					</Route>
+				</IonRouterOutlet>
+			</IonReactRouter>
+		</IonApp>
+		<ReactQueryDevtools initialIsOpen={false} />
+	</QueryClientProvider>
 );
 
 export default App;
