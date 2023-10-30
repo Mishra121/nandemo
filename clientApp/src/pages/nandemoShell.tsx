@@ -19,8 +19,6 @@ import HeaderNandemo from "../components/common/Header";
 import "./nandemoShellPage.css";
 import { randomInteger } from "../utilities/helpers";
 import { NDEMO_API_URL } from "../constants/url";
-import { useEffect } from "react";
-import { checkUserInfo } from "../utilities/helpers/auth";
 import { bodySharp, bookSharp, walletSharp } from "ionicons/icons";
 
 const nandemoAppOptions = [
@@ -51,14 +49,6 @@ const nandemoAppOptions = [
 
 const NandemoShell: React.FC = () => {
 	const history = useHistory();
-
-	useEffect(() => {
-		const parsedUserInfo = checkUserInfo();
-
-		if (!parsedUserInfo.token) {
-			history.push("/auth/nandemo/login");
-		}
-	}, []);
 
 	const { data: randomQuotesData } = useQuery(
 		"quoteData",

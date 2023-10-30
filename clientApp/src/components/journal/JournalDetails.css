@@ -1,0 +1,26 @@
+@media only screen and (min-width: 650px) {
+	.journal-detail-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		margin-top: 40px;
+	}
+
+	.post-footer {
+		max-width: 45%;
+		margin: 0 auto;
+	}
+}
+
+@media only screen and (max-width: 649px) {
+}
+
+.view-post-footer {
+	background-color: #222428;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	padding-bottom: 1rem;
+}
+
+.journal-edit {
+	margin-top: 18px;
+}

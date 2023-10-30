@@ -1,11 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
 	IonCard,
 	IonCardHeader,
 	IonCardTitle,
 	IonCardSubtitle,
-	IonCardContent,
+	// IonCardContent,
 	IonButton,
 	IonIcon,
 } from "@ionic/react";
@@ -19,7 +19,7 @@ import { checkUserInfo } from "../../utilities/helpers/auth";
 import request from "../../utilities/helpers/request";
 import "./AllJournals.css";
 import { arrowForwardCircle, arrowBackCircle } from "ionicons/icons";
-import { fixedLengthString, isObjectEmpty } from "../../utilities/helpers";
+import { fixedLengthString } from "../../utilities/helpers";
 import { formatDateString } from "../../utilities/dates";
 import useWindowDimensions from "../../utilities/hooks/use-window-dimensions";
 
@@ -30,12 +30,6 @@ const AllJournals: React.FC = () => {
 	const isMobileView = windowWidth ? windowWidth <= 600 : false;
 
 	const parsedUserInfo = checkUserInfo();
-
-	useEffect(() => {
-		if (isObjectEmpty(parsedUserInfo)) {
-			history.push("/auth/nandemo/login");
-		}
-	}, [parsedUserInfo?.user_info]);
 
 	const { data: journalsData, isLoading: isLoadingJournals } = useQuery(
 		`journalsData-${currPage}`,
@@ -117,8 +111,7 @@ const AllJournals: React.FC = () => {
 	};
 
 	const handleCardClick = (journalId: string) => {
-		console.log("handleCardClick clicked", { journalId });
-		// setShowJournalById("56463654564563");
+		history.push("/journal-app/" + journalId);
 	};
 
 	return (
@@ -152,10 +145,6 @@ const AllJournals: React.FC = () => {
 								: ""}
 						</IonCardSubtitle>
 					</IonCardHeader>
-
-					<IonCardContent>
-						{fixedLengthString(journalData.description, 80)}
-					</IonCardContent>
 				</IonCard>
 			))}
 

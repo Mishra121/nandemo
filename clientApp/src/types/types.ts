@@ -18,6 +18,10 @@ export type JournalType = {
 	user_id: string;
 };
 
+export type JournalDataResponse = {
+	journal_data: JournalType;
+};
+
 export type AllJournalType = {
 	journals?: JournalType[];
 	error?: string;
