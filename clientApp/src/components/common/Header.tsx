@@ -6,8 +6,10 @@ import {
 	IonToolbar,
 } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
-import { useLocation } from "react-router-dom";
-import { getActiveAppName } from "../../utilities/helpers";
+import { useEffect } from "react";
+import { useHistory, useLocation } from "react-router-dom";
+import { getActiveAppName, isObjectEmpty } from "../../utilities/helpers";
+import { checkUserInfo } from "../../utilities/helpers/auth";
 import useWindowDimensions from "../../utilities/hooks/use-window-dimensions";
 import "./HeaderNandemo.css";
 
@@ -17,12 +19,29 @@ const ActiveApp = ({ activeAppName }: { activeAppName: string }) => (
 	</p>
 );
 
+const authorizedPages = ["journal-app", "nandemo-select", "expense-manager"];
+
 const HeaderNandemo: React.FC = () => {
+	const history = useHistory();
 	const { width: windowWidth } = useWindowDimensions();
 	const isMobileView = windowWidth ? windowWidth <= 600 : false;
 	const location = useLocation();
 	const activeAppName = getActiveAppName(location.pathname);
 	const showBackButton = location.pathname.includes("auth");
+	const parsedUserInfo = checkUserInfo();
+	const isAuthorizedPage = authorizedPages?.find(
+		(pageName) => `/${pageName}` === location.pathname
+	);
+
+	useEffect(() => {
+		if (
+			isObjectEmpty(parsedUserInfo) &&
+			isAuthorizedPage &&
+			isAuthorizedPage?.length > 0
+		) {
+			history.push("/auth/nandemo/login");
+		}
+	}, [parsedUserInfo?.user_info]);
 
 	return (
 		<>

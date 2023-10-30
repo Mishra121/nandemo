@@ -9,6 +9,8 @@ import ExpenseManager from "./pages/expenseManager";
 import NandemoShell from "./pages/nandemoShell";
 import Login from "./pages/LoginPage";
 import Signup from "./pages/SignUpPage";
+import SelectedJournal from "./pages/selectedJournal";
+import EditSelectedJournal from "./pages/editSelectedJournal";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -41,6 +43,12 @@ const App: React.FC = () => (
 				<IonRouterOutlet>
 					<Route exact path="/journal-app">
 						<JournalPage />
+					</Route>
+					<Route exact path="/journal-app/:journalId">
+						<SelectedJournal />
+					</Route>
+					<Route exact path="/journal-app/edit/:journalId">
+						<EditSelectedJournal />
 					</Route>
 					<Route exact path="/expense-manager">
 						<ExpenseManager />
