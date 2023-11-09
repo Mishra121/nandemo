@@ -30,7 +30,9 @@ const HeaderNandemo: React.FC = () => {
 	const showBackButton = location.pathname.includes("auth");
 	const parsedUserInfo = checkUserInfo();
 	const isAuthorizedPage = authorizedPages?.find(
-		(pageName) => `/${pageName}` === location.pathname
+		(pageName) =>
+			`/${pageName}` === location.pathname ||
+			`/${pageName}/` === location.pathname
 	);
 
 	useEffect(() => {
