@@ -15,4 +15,12 @@
 	.create-journal-container {
 		max-width: 85%;
 	}
+
+	.create-journal-container h2 {
+		font-size: 1.1rem;
+	}
+
+	.react-quill-div .ql-container {
+		height: 200px;
+	}
 }
