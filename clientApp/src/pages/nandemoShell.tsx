@@ -1,11 +1,14 @@
 import {
+	IonButton,
 	IonCard,
 	IonCardContent,
 	IonCardHeader,
 	IonCardTitle,
 	IonContent,
+	IonFooter,
 	IonIcon,
 	IonPage,
+	IonRow,
 	IonThumbnail,
 } from "@ionic/react";
 import { useHistory } from "react-router-dom";
@@ -19,7 +22,12 @@ import HeaderNandemo from "../components/common/Header";
 import "./nandemoShellPage.css";
 import { randomInteger } from "../utilities/helpers";
 import { NDEMO_API_URL } from "../constants/url";
-import { bodySharp, bookSharp, walletSharp } from "ionicons/icons";
+import {
+	bodySharp,
+	bookSharp,
+	logOutOutline,
+	walletSharp,
+} from "ionicons/icons";
 
 const nandemoAppOptions = [
 	{
@@ -71,6 +79,11 @@ const NandemoShell: React.FC = () => {
 		if (url !== "") {
 			history.push(url);
 		}
+	};
+
+	const handleSignOutClick = () => {
+		localStorage.removeItem("user_info");
+		history.push("/auth/nandemo/login", { from: "NO_AUTH" });
 	};
 
 	return (
@@ -129,6 +142,22 @@ const NandemoShell: React.FC = () => {
 						))}
 					</div>
 				</IonContent>
+
+				<IonFooter className="view-post-footer">
+					<IonRow className="post-footer ">
+						<div>
+							<IonButton
+								fill="outline"
+								color="tertiary"
+								className="journal-edit"
+								onClick={handleSignOutClick}
+							>
+								Sign out
+								<IonIcon slot="end" icon={logOutOutline}></IonIcon>
+							</IonButton>
+						</div>
+					</IonRow>
+				</IonFooter>
 			</IonPage>
 		</ErrorBoundary>
 	);
