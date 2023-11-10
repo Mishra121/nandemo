@@ -137,9 +137,7 @@ const Signup = () => {
 					onDidDismiss={() => setIsOpen(false)}
 					duration={4000}
 				></IonToast>
-			</IonContent>
 
-			<IonFooter>
 				{isMobileView && (
 					<IonGrid className="ion-no-margin ion-no-padding">
 						<Action
@@ -150,7 +148,9 @@ const Signup = () => {
 						<Wave />
 					</IonGrid>
 				)}
+			</IonContent>
 
+			<IonFooter>
 				{!isMobileView && (
 					<Action
 						message="Already got an account?"

@@ -31,22 +31,24 @@ const JournalPage: React.FC = () => {
 
 					{journalTabState === CREATE && <CreateJournal />}
 
-					<div className="journal-tab-bar">
-						<IonTabBar color={"dark"}>
-							<IonTabButton
-								tab="all-journals"
-								onClick={() => setJournalTabState(JOURNALS)}
-							>
-								<IonIcon icon={clipboard} /> Journals
-							</IonTabButton>
-							<IonTabButton
-								tab="create-or-edit"
-								onClick={() => setJournalTabState(CREATE)}
-							>
-								<IonIcon icon={create} /> Create
-							</IonTabButton>
-						</IonTabBar>
-					</div>
+					{journalTabState !== CREATE && (
+						<div className="journal-tab-bar">
+							<IonTabBar color={"dark"}>
+								<IonTabButton
+									tab="all-journals"
+									onClick={() => setJournalTabState(JOURNALS)}
+								>
+									<IonIcon icon={clipboard} /> Journals
+								</IonTabButton>
+								<IonTabButton
+									tab="create-or-edit"
+									onClick={() => setJournalTabState(CREATE)}
+								>
+									<IonIcon icon={create} /> Create
+								</IonTabButton>
+							</IonTabBar>
+						</div>
+					)}
 				</IonContent>
 			</IonPage>
 		</ErrorBoundary>
