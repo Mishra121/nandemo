@@ -31,3 +31,7 @@ type ResetPasswordInput struct {
 	Password        string `json:"password" binding:"required"`
 	PasswordConfirm string `json:"passwordConfirm" binding:"required"`
 }
+
+type RefreshTokenBody struct {
+	Refresh_token string `json:"refresh_token" validate:"required"`
+}

@@ -60,6 +60,16 @@ func VerifyPassword(userPassword string, providedPassword string) (bool, string)
 	return check, msg
 }
 
+type respFoundUser struct {
+	Fname         string `json:"first_name"`
+	Lname         string `json:"last_name"`
+	Email         string `json:"email"`
+	Phone         string `json:"phone"`
+	Token         string `json:"token"`
+	Refresh_token string `json:"refresh_token"`
+	User_id       string `json:"user_id"`
+}
+
 // CreateUser is the api used to tget a single user
 func SignUp() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -152,27 +162,62 @@ func Login() gin.HandlerFunc {
 
 		helper.UpdateAllTokens(token, refreshToken, foundUser.User_id)
 
-		type respFoundUser struct {
-			Fname         string `json:"first_name"`
-			Lname         string `json:"last_name"`
-			Email         string `json:"email"`
-			Phone         string `json:"phone"`
-			Token         string `json:"token"`
-			Refresh_token string `json:"refresh_token"`
-			User_id       string `json:"user_id"`
-		}
-
 		responseUser := &respFoundUser{
 			Fname:         *foundUser.First_name,
 			Lname:         *foundUser.Last_name,
 			Email:         *foundUser.Email,
 			Phone:         *foundUser.Phone,
-			Token:         *foundUser.Token,
-			Refresh_token: *foundUser.Refresh_token,
+			Token:         token,
+			Refresh_token: refreshToken,
 			User_id:       foundUser.User_id,
 		}
 
 		c.JSON(http.StatusOK, gin.H{"user_info": responseUser})
+	}
+}
+
+func RefreshToken() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		var reqBody models.RefreshTokenBody
+		var user models.UserModel
+
+		defer cancel()
+		if err := c.BindJSON(&reqBody); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		log.Printf("sdsd", reqBody.Refresh_token)
+
+		_, err := helper.ValidateToken(reqBody.Refresh_token)
+		if err != "" {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+			c.Abort()
+			return
+		}
+
+		findUserErr := userAuthCollection.FindOne(ctx, bson.M{"refresh_token": reqBody.Refresh_token}).Decode(&user)
+		defer cancel()
+		if findUserErr != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error1": "invalid token"})
+			return
+		}
+
+		token, refreshToken, _ := helper.GenerateAllTokens(*user.Email, *user.First_name, *user.Last_name, user.User_id)
+		helper.UpdateAllTokens(token, refreshToken, user.User_id)
+
+		responseUser := &respFoundUser{
+			Fname:         *user.First_name,
+			Lname:         *user.Last_name,
+			Email:         *user.Email,
+			Phone:         *user.Phone,
+			Token:         token,
+			Refresh_token: refreshToken,
+			User_id:       user.User_id,
+		}
+
+		c.JSON(http.StatusOK, gin.H{"refresh_user_info": responseUser})
 	}
 }
 
