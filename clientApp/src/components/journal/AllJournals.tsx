@@ -25,7 +25,7 @@ import {
 	arrowBackCircle,
 	alertCircleOutline,
 } from "ionicons/icons";
-import { fixedLengthString } from "../../utilities/helpers";
+import { fixedLengthString, isObjectEmpty } from "../../utilities/helpers";
 import { formatDateString } from "../../utilities/dates";
 import useWindowDimensions from "../../utilities/hooks/use-window-dimensions";
 import { JOURNAL_MONTHS } from "../../constants/journals";
@@ -132,9 +132,35 @@ const AllJournals: React.FC = () => {
 			</div>
 		);
 
-	if (journalsData?.error?.includes("expired")) {
-		localStorage.removeItem("user_info");
-		history.push("/auth/nandemo/login");
+	if (
+		journalsData?.error?.includes("expired") &&
+		!isObjectEmpty(parsedUserInfo)
+	) {
+		const requestOptions = {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				refresh_token: parsedUserInfo.refresh_token,
+			}),
+		};
+
+		fetch(NDEMO_API_URL + "/users-auth/refresh-token", requestOptions)
+			.then((response) => response.json())
+			.then((data) => {
+				if (data?.refresh_user_info) {
+					localStorage.setItem(
+						"user_info",
+						JSON.stringify(data.refresh_user_info)
+					);
+				} else {
+					localStorage.removeItem("user_info");
+					history.push("/auth/nandemo/login");
+				}
+			})
+			.catch(() => {
+				localStorage.removeItem("user_info");
+				history.push("/auth/nandemo/login");
+			});
 	}
 
 	const allJournals = journalsData?.journals;

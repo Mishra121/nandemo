@@ -9,6 +9,7 @@ import {
 	IonGrid,
 	IonPage,
 	IonRow,
+	IonSpinner,
 	IonToast,
 } from "@ionic/react";
 import { useParams, useHistory } from "react-router";
@@ -30,12 +31,13 @@ const Login = () => {
 	const fields = useLoginFields();
 	const [errors, setErrors] = useState<any>(false);
 	const [isOpen, setIsOpen] = useState(false);
+	const [isRequestingLogin, setIsRequestingLogin] = useState(false);
 
 	const onLogin = () => {
 		const errors = validateForm(fields);
 		setErrors(errors);
-
 		if (!errors.length) {
+			setIsRequestingLogin(true);
 			//  Submit your form here
 			const email = fields[0]?.input?.state.value;
 			const password = fields[1]?.input?.state.value;
@@ -50,9 +52,9 @@ const Login = () => {
 			};
 
 			// TODO: add type and react query mutation
-			// Also add the loading state maybe at submit button
 			request<any>(NDEMO_API_URL + "/users-auth/login", requestOptions)
 				.then((res) => {
+					setIsRequestingLogin(false);
 					if (res.user_info) {
 						localStorage.setItem("user_info", JSON.stringify(res.user_info));
 						history.push("/nandemo-select");
@@ -61,6 +63,7 @@ const Login = () => {
 					}
 				})
 				.catch(() => {
+					setIsRequestingLogin(false);
 					setIsOpen(true);
 				});
 		}
@@ -81,7 +84,7 @@ const Login = () => {
 				<IonGrid className="ion-padding ion-margin-top">
 					<IonRow>
 						<IonCol size="12" className={styles.headingText}>
-							<IonCardTitle>Log in</IonCardTitle>
+							<IonCardTitle style={{ color: "#000000" }}>Log in</IonCardTitle>
 							<h5>Welcome back, hope you&apos;re doing well</h5>
 						</IonCol>
 					</IonRow>
@@ -103,8 +106,13 @@ const Login = () => {
 								className="custom-button"
 								expand="block"
 								onClick={onLogin}
+								disabled={isRequestingLogin}
 							>
-								Login
+								{isRequestingLogin ? (
+									<IonSpinner name="bubbles"></IonSpinner>
+								) : (
+									"Login"
+								)}
 							</IonButton>
 						</IonCol>
 					</IonRow>
