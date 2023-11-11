@@ -1,3 +1,5 @@
+import { isPlatform } from "@ionic/react";
+
 export const getActiveAppName = (pathName: string): string => {
 	if (pathName.includes("journal-app")) return "Journal";
 	if (pathName.includes("expense-manager")) return "BudgetMod";
@@ -26,4 +28,13 @@ export const isObjectEmpty = (objectName: object) => {
 
 export const refreshPage = () => {
 	window.location.reload();
+};
+
+export const isMobilePlatform = () => {
+	const isIos = isPlatform("ios");
+	const isAndroid = isPlatform("android");
+
+	if (isIos || isAndroid) return true;
+
+	return false;
 };
