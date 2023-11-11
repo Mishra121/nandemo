@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -11,6 +11,7 @@ import Login from "./pages/LoginPage";
 import Signup from "./pages/SignUpPage";
 import SelectedJournal from "./pages/selectedJournal";
 import EditSelectedJournal from "./pages/editSelectedJournal";
+import NotFoundPage from "./pages/notFoundPage";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -41,32 +42,31 @@ const App: React.FC = () => (
 		<IonApp>
 			<IonReactRouter>
 				<IonRouterOutlet>
-					<Switch>
-						<Route exact path="/journal-app">
-							<JournalPage />
-						</Route>
-						<Route exact path="/journal-app/:journalId">
-							<SelectedJournal />
-						</Route>
-						<Route exact path="/journal-app/edit/:journalId">
-							<EditSelectedJournal />
-						</Route>
-						<Route exact path="/expense-manager">
-							<ExpenseManager />
-						</Route>
-						<Route exact path="/nandemo-select">
-							<NandemoShell />
-						</Route>
-						<Route exact path="/auth/nandemo/login">
-							<Login />
-						</Route>
-						<Route exact path="/auth/nandemo/signup">
-							<Signup />
-						</Route>
-						<Route exact path="/">
-							<Redirect to="/nandemo-select" />
-						</Route>
-					</Switch>
+					<Route exact path="/journal-app">
+						<JournalPage />
+					</Route>
+					<Route exact path="/journal-app/:journalId">
+						<SelectedJournal />
+					</Route>
+					<Route exact path="/journal-app/edit/:journalId">
+						<EditSelectedJournal />
+					</Route>
+					<Route exact path="/expense-manager">
+						<ExpenseManager />
+					</Route>
+					<Route exact path="/nandemo-select">
+						<NandemoShell />
+					</Route>
+					<Route exact path="/auth/nandemo/login">
+						<Login />
+					</Route>
+					<Route exact path="/auth/nandemo/signup">
+						<Signup />
+					</Route>
+					<Route exact path="/">
+						<Redirect to="/nandemo-select" />
+					</Route>
+					<Route component={NotFoundPage} />
 				</IonRouterOutlet>
 			</IonReactRouter>
 		</IonApp>
