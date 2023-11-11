@@ -16,9 +16,9 @@ import { useQuery } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import HeaderNandemo from "../components/common/Header";
 import JournalDetails from "../components/journal/JournalDetails";
-import { NDEMO_API_URL } from "../constants/url";
+import { NDEMO_API_URL, WEB_APP_URL } from "../constants/url";
 import { JournalDataResponse } from "../types/types";
-import { isObjectEmpty } from "../utilities/helpers";
+import { isMobilePlatform, isObjectEmpty } from "../utilities/helpers";
 import { checkUserInfo } from "../utilities/helpers/auth";
 import request from "../utilities/helpers/request";
 
@@ -59,7 +59,9 @@ const SelectedJournal = () => {
 
 	const userCanEdit = journalCreatorId === authorizedUserId;
 
-	const journalShareUrl = window.location.href ?? "";
+	const journalShareUrl = isMobilePlatform()
+		? `${WEB_APP_URL}/journal-app/${journalId}`
+		: window.location.href;
 
 	useEffect(() => {
 		async function copyTextToClipboard(text: string) {
