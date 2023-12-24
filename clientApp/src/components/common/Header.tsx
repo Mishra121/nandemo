@@ -75,7 +75,7 @@ const HeaderNandemo: React.FC = () => {
 
 	return (
 		<>
-			<IonHeader>
+			<IonHeader data-testid="test-header-nandemo">
 				<IonToolbar color={"dark"}>
 					<IonTitle>
 						<div className="header-nandemo">
