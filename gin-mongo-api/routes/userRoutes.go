@@ -13,4 +13,7 @@ func UserRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.POST("/users-auth/refresh-token", controller.RefreshToken())
 	incomingRoutes.POST("/users-auth/forgotpassword", controller.ForgotPassword())
 	incomingRoutes.PATCH("/users-auth/resetpassword/:resetToken", controller.ResetPassword())
+
+	oauthSessionGroupRouter := incomingRoutes.Group("/api/sessions/oauth")
+	oauthSessionGroupRouter.GET("/google", controller.GoogleOAuth())
 }

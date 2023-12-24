@@ -22,6 +22,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -64,7 +65,6 @@ type respFoundUser struct {
 	Fname         string `json:"first_name"`
 	Lname         string `json:"last_name"`
 	Email         string `json:"email"`
-	Phone         string `json:"phone"`
 	Token         string `json:"token"`
 	Refresh_token string `json:"refresh_token"`
 	User_id       string `json:"user_id"`
@@ -98,16 +98,8 @@ func SignUp() gin.HandlerFunc {
 		password := HashPassword(*user.Password)
 		user.Password = &password
 
-		count, err = userAuthCollection.CountDocuments(ctx, bson.M{"phone": user.Phone})
-		defer cancel()
-		if err != nil {
-			log.Panic(err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "error occured while checking for the phone number"})
-			return
-		}
-
 		if count > 0 {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "this email or phone number already exists"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "this email already exists"})
 			return
 		}
 
@@ -166,7 +158,6 @@ func Login() gin.HandlerFunc {
 			Fname:         *foundUser.First_name,
 			Lname:         *foundUser.Last_name,
 			Email:         *foundUser.Email,
-			Phone:         *foundUser.Phone,
 			Token:         token,
 			Refresh_token: refreshToken,
 			User_id:       foundUser.User_id,
@@ -211,7 +202,6 @@ func RefreshToken() gin.HandlerFunc {
 			Fname:         *user.First_name,
 			Lname:         *user.Last_name,
 			Email:         *user.Email,
-			Phone:         *user.Phone,
 			Token:         token,
 			Refresh_token: refreshToken,
 			User_id:       user.User_id,
@@ -327,5 +317,79 @@ func ResetPassword() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, gin.H{"status": "success", "message": "Password data updated successfully"})
+	}
+}
+
+func GoogleOAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		code := c.Query("code")
+		// var pathUrl string = "/"
+
+		// if c.Query("state") != "" {
+		// 	pathUrl = c.Query("state")
+		// }
+
+		if code == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"status": "fail", "message": "Authorization code not provided!"})
+			return
+		}
+
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
+		// Use the code to get the id and access tokens
+		tokenRes, err := utils.GetGoogleOauthToken(code)
+
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		}
+
+		user, err := utils.GetGoogleUser(tokenRes.Access_token, tokenRes.Id_token)
+
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		}
+
+		filter := bson.M{"email": user.Email}
+		update := bson.M{
+			"$set": bson.M{"first_name": user.Given_name, "last_name": user.Family_name},
+		}
+		upsert := true
+		after := options.After
+		opt := options.FindOneAndUpdateOptions{
+			ReturnDocument: &after,
+			Upsert:         &upsert,
+		}
+
+		result := userAuthCollection.FindOneAndUpdate(ctx, filter, update, &opt)
+		defer cancel()
+
+		if result.Err() != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+			return
+		}
+
+		var docRes models.SocialUserModel
+		decodeErr := result.Decode(&docRes)
+
+		if decodeErr != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": decodeErr.Error()})
+			return
+		}
+
+		token, refreshToken, _ := helper.GenerateAllTokens(*docRes.Email, *docRes.First_name, *docRes.Last_name, docRes.User_id)
+		helper.UpdateAllTokens(token, refreshToken, docRes.User_id)
+
+		responseUser := &respFoundUser{
+			Fname:         *docRes.First_name,
+			Lname:         *docRes.Last_name,
+			Email:         *docRes.Email,
+			Token:         token,
+			Refresh_token: refreshToken,
+			User_id:       docRes.User_id,
+		}
+
+		queryVar := "first_name=" + responseUser.Fname + "&email=" + responseUser.Email + "&token=" + responseUser.Token + "&refresh_token=" + responseUser.Refresh_token
+		feRedirectUrl := "https://nandemo-classic-client.netlify.app/social-auth/update?" + queryVar
+		c.Redirect(http.StatusMovedPermanently, feRedirectUrl)
 	}
 }
