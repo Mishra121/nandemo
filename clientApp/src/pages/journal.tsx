@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useState, Suspense, lazy } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import Skeleton from "react-loading-skeleton";
 import {
 	IonContent,
 	IonIcon,
@@ -14,7 +15,8 @@ import SubHeaderMobile from "../components/common/SubHeaderMobile";
 import "./journalPage.css";
 import { JOURNALS, CREATE } from "../constants/journals";
 import AllJournals from "../components/journal/AllJournals";
-import CreateJournal from "../components/journal/CreateJournal";
+
+const CreateJournal = lazy(() => import("../components/journal/CreateJournal"));
 
 const JournalPage: React.FC = () => {
 	const [journalTabState, setJournalTabState] = useState<string>(JOURNALS);
@@ -29,7 +31,27 @@ const JournalPage: React.FC = () => {
 
 					{journalTabState === JOURNALS && <AllJournals />}
 
-					{journalTabState === CREATE && <CreateJournal />}
+					{journalTabState === CREATE && (
+						<Suspense
+							fallback={
+								<div
+									style={{ width: "80%", margin: "0 auto", marginTop: "25px" }}
+								>
+									<Skeleton height={45} />
+									<br />
+									<Skeleton height={45} />
+									<br />
+									<Skeleton height={45} />
+									<br />
+									<Skeleton height={45} />
+									<br />
+									<Skeleton height={45} />
+								</div>
+							}
+						>
+							<CreateJournal />
+						</Suspense>
+					)}
 
 					{journalTabState !== CREATE && (
 						<div className="journal-tab-bar">

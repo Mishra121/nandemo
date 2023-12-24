@@ -26,18 +26,18 @@ export const useSignupFields = () => {
 				state: useFormInput(""),
 			},
 		},
-		{
-			id: "phone",
-			label: "Phone",
-			required: true,
-			input: {
-				props: {
-					type: "text",
-					placeholder: "123456789",
-				},
-				state: useFormInput(""),
-			},
-		},
+		// {
+		// 	id: "phone",
+		// 	label: "Phone",
+		// 	required: true,
+		// 	input: {
+		// 		props: {
+		// 			type: "text",
+		// 			placeholder: "123456789",
+		// 		},
+		// 		state: useFormInput(""),
+		// 	},
+		// },
 		{
 			id: "email",
 			label: "Email",

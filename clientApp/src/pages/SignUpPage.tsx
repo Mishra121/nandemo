@@ -47,9 +47,8 @@ const Signup = () => {
 			//  Submit your form here
 			const first_name = fields[0]?.input?.state.value;
 			const last_name = fields[1]?.input?.state.value;
-			const phone = fields[2]?.input?.state.value;
-			const email = fields[3]?.input?.state.value;
-			const password = fields[4]?.input?.state.value;
+			const email = fields[2]?.input?.state.value;
+			const password = fields[3]?.input?.state.value;
 
 			const requestOptions = {
 				method: "POST",
@@ -57,7 +56,6 @@ const Signup = () => {
 				body: JSON.stringify({
 					first_name,
 					last_name,
-					phone,
 					email,
 					password,
 				}),
