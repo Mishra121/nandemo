@@ -32,6 +32,7 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 import "./theme/custom-tab-bar.css";
+import SocialAuthPage from "./pages/socialAuthPage";
 
 setupIonicReact();
 
@@ -42,6 +43,9 @@ const App: React.FC = () => (
 		<IonApp>
 			<IonReactRouter>
 				<IonRouterOutlet>
+					<Route path="/social-auth/update">
+						<SocialAuthPage />
+					</Route>
 					<Route exact path="/journal-app">
 						<JournalPage />
 					</Route>

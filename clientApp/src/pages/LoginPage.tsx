@@ -7,6 +7,7 @@ import {
 	IonContent,
 	IonFooter,
 	IonGrid,
+	IonIcon,
 	IonPage,
 	IonRow,
 	IonSpinner,
@@ -23,11 +24,15 @@ import { validateForm } from "../data/utils";
 import HeaderNandemo from "../components/common/Header";
 import request from "../utilities/helpers/request";
 import { NDEMO_API_URL } from "../constants/url";
+import { getGoogleUrl } from "../utilities/helpers/getGoogleUrl";
+import { logoGoogle } from "ionicons/icons";
 
 const Login = () => {
 	const params = useParams();
 	const history = useHistory();
 
+	const fromUrl =
+		((history.location.state as any)?.from?.pathname as string) || "/";
 	const fields = useLoginFields();
 	const [errors, setErrors] = useState<any>(false);
 	const [isOpen, setIsOpen] = useState(false);
@@ -114,6 +119,18 @@ const Login = () => {
 									"Login"
 								)}
 							</IonButton>
+							<br />
+							<hr />
+						</IonCol>
+					</IonRow>
+					<IonRow>
+						<IonCol>
+							<a href={getGoogleUrl(fromUrl)}>
+								<IonButton color={"primary"} className="google-signin-button">
+									<IonIcon slot="start" icon={logoGoogle}></IonIcon>
+									Sign in with google
+								</IonButton>
+							</a>
 						</IonCol>
 					</IonRow>
 				</IonGrid>
