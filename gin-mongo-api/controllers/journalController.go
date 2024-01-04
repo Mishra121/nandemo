@@ -3,15 +3,19 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"os"
 	"strconv"
 
 	"net/http"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/gin-gonic/gin"
 
 	"gin-mongo-api/configs"
 	"gin-mongo-api/models"
+	"gin-mongo-api/utils"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -294,5 +298,63 @@ func EditAJournal() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusNoContent, gin.H{"message": "journal updated successfully"})
+	}
+}
+
+func EditJournalUploadImage() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		svc := utils.CreateS3Session()
+		AWSBucketname := os.Getenv("AWS_BUCKET_NAME")
+
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		journalId := c.Param("journalId")
+		journalObjId, _ := primitive.ObjectIDFromHex(journalId)
+
+		defer cancel()
+
+		file, err := c.FormFile("file")
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		fileContent, err := file.Open()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to open file"})
+			return
+		}
+		defer fileContent.Close()
+
+		uploadJournalImageName := journalId + file.Filename
+		// Upload the file to S3
+		_, err = svc.PutObject(&s3.PutObjectInput{
+			Bucket: aws.String(AWSBucketname),
+			Key:    aws.String(uploadJournalImageName),
+			Body:   fileContent,
+		})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload file"})
+			return
+		}
+
+		// Generate a URL for the uploaded image
+		imageURL := fmt.Sprintf("https://%s.s3.amazonaws.com/%s", AWSBucketname, uploadJournalImageName)
+
+		filter := bson.M{"_id": journalObjId}
+		update := bson.M{
+			"$set": bson.M{"attachment": imageURL},
+		}
+
+		_, err = journalCollection.UpdateOne(ctx, filter, update)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "uploaded successfully",
+			"refresh": true,
+		})
 	}
 }

@@ -10,5 +10,6 @@ func JournalRoutes(router *gin.Engine) {
 	router.POST("/journal/create", controllers.CreateJournal())
 	router.GET("/journals", controllers.GetAllJournalOfUser())
 	router.DELETE("/journal/:journalId", controllers.DeleteAJournal())
+	router.POST("/journal/upload-img/:journalId", controllers.EditJournalUploadImage())
 	router.PUT("/journal/:journalId", controllers.EditAJournal())
 }
