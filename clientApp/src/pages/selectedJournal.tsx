@@ -104,7 +104,11 @@ const SelectedJournal = () => {
 							</div>
 						)}
 						{!isLoadingJournal && journalData && (
-							<JournalDetails journalData={journalData?.journal_data} />
+							<JournalDetails
+								journalData={journalData?.journal_data}
+								userCanEdit={userCanEdit}
+								journalId={journalId}
+							/>
 						)}
 					</>
 				</div>
