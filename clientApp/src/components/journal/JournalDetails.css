@@ -24,3 +24,13 @@
 .journal-edit {
 	margin-top: 18px;
 }
+
+.image-upload-container {
+	background-color: #222428;
+	height: 80px;
+	width: 220px;
+	border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

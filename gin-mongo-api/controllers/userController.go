@@ -388,7 +388,7 @@ func GoogleOAuth() gin.HandlerFunc {
 			User_id:       docRes.User_id,
 		}
 
-		queryVar := "first_name=" + responseUser.Fname + "&email=" + responseUser.Email + "&token=" + responseUser.Token + "&refresh_token=" + responseUser.Refresh_token
+		queryVar := "first_name=" + responseUser.Fname + "&email=" + responseUser.Email + "&token=" + responseUser.Token + "&refresh_token=" + responseUser.Refresh_token + "&user_id=" + responseUser.User_id
 		feRedirectUrl := "https://nandemo-classic-client.netlify.app/social-auth/update?" + queryVar
 		c.Redirect(http.StatusMovedPermanently, feRedirectUrl)
 	}
