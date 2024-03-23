@@ -1,5 +1,4 @@
 .journal-tab-bar {
-	position: fixed;
-	bottom: 0px;
+	margin-top: 25px;
 	width: 100%;
 }

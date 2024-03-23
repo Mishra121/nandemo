@@ -26,10 +26,13 @@ import request from "../utilities/helpers/request";
 import { NDEMO_API_URL } from "../constants/url";
 import { getGoogleUrl } from "../utilities/helpers/getGoogleUrl";
 import { logoGoogle } from "ionicons/icons";
+import useWindowDimensions from "../utilities/hooks/use-window-dimensions";
 
 const Login = () => {
 	const params = useParams();
 	const history = useHistory();
+	const { width: windowWidth } = useWindowDimensions();
+	const isMobileView = windowWidth ? windowWidth <= 600 : false;
 
 	const fromUrl =
 		((history.location.state as any)?.from?.pathname as string) || "/";
@@ -94,6 +97,19 @@ const Login = () => {
 						</IonCol>
 					</IonRow>
 
+					{!isMobileView && (
+						<IonRow>
+							<IonCol>
+								<a href={getGoogleUrl(fromUrl)}>
+									<IonButton color={"primary"} className="google-signin-button">
+										<IonIcon slot="start" icon={logoGoogle}></IonIcon>
+										Sign in with google
+									</IonButton>
+								</a>
+							</IonCol>
+						</IonRow>
+					)}
+
 					<IonRow className="ion-margin-top ion-padding-top">
 						<IonCol size="12">
 							{fields.map((field, index) => {
@@ -123,16 +139,18 @@ const Login = () => {
 							<hr />
 						</IonCol>
 					</IonRow>
-					<IonRow>
-						<IonCol>
-							<a href={getGoogleUrl(fromUrl)}>
-								<IonButton color={"primary"} className="google-signin-button">
-									<IonIcon slot="start" icon={logoGoogle}></IonIcon>
-									Sign in with google
-								</IonButton>
-							</a>
-						</IonCol>
-					</IonRow>
+					{isMobileView && (
+						<IonRow>
+							<IonCol>
+								<a href={getGoogleUrl(fromUrl)}>
+									<IonButton color={"primary"} className="google-signin-button">
+										<IonIcon slot="start" icon={logoGoogle}></IonIcon>
+										Sign in with google
+									</IonButton>
+								</a>
+							</IonCol>
+						</IonRow>
+					)}
 				</IonGrid>
 				<IonToast
 					color={"danger"}
@@ -141,17 +159,27 @@ const Login = () => {
 					onDidDismiss={() => setIsOpen(false)}
 					duration={4000}
 				></IonToast>
-			</IonContent>
 
-			<IonFooter>
-				<IonGrid className="ion-no-margin ion-no-padding">
+				{isMobileView && (
+					<IonGrid className="ion-no-margin ion-no-padding">
 					<Action
 						message="Don't have an account?"
 						text="Sign up"
 						link="/auth/nandemo/signup"
 					/>
 					<Wave />
-				</IonGrid>
+					</IonGrid>
+				)}
+			</IonContent>
+
+			<IonFooter>
+				{!isMobileView && (
+					<Action
+						message="Don't have an account?"
+						text="Sign up"
+						link="/auth/nandemo/signup"
+					/>
+				)}
 			</IonFooter>
 		</IonPage>
 	);
